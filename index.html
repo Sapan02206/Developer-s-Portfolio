@@ -156,8 +156,8 @@
 <!-- Home Page - Hero Section -->
 <section id="home">
     <div>
-        <h1>Web Developer Portfolio</h1>
-        <h2>Your Name</h2> <!-- This will be dynamically updated -->
+        <h1 id="home-title">Web Developer Portfolio</h1> <!-- This title will be dynamically updated -->
+        <h2 id="home-name">Your Name</h2> <!-- This will be updated based on user input -->
         <p>I’m a Web Developer specializing in front-end and back-end technologies</p>
         <a href="#projects" class="cta-btn" onclick="showPage('projects')">Check out my work</a>
     </div>
@@ -187,8 +187,8 @@
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal('customize-portfolio')">&times;</span>
         <h3>Customize Your Portfolio</h3>
-        <input type="text" id="portfolio-title" placeholder="Portfolio Title">
-         <!-- New Feature: Customize Name -->
+        <input type="text" id="portfolio-title" placeholder="Portfolio Title" value="Web Developer Portfolio">
+<!-- New Feature: Customize Name -->
         <input type="text" id="custom-name" placeholder="Enter Your Name" />
         <input type="text" id="portfolio-description" placeholder="Portfolio Description">
         <input type="file" id="background-image" accept="image/*" onchange="previewBackgroundImage(event)">
@@ -209,8 +209,6 @@
         <button onclick="savePortfolioCustomization()">Save Changes</button>
     </div>
 </div>
-
-<!-- Other modals remain the same -->
 
 <script>
     // Modal Functions
@@ -234,11 +232,19 @@
 
     // Save Portfolio Customization and update the name
     function savePortfolioCustomization() {
-        var name = document.getElementById('custom-name').value; // Get the custom name
-        if (name) {
-            document.querySelector('#home h2').innerText = name; // Update the name in the home section
+        var title = document.getElementById('portfolio-title').value;
+        var name = document.getElementById('custom-name').value;
+
+        if (title) {
+            document.getElementById('home-title').innerText = title; // Update the title
         }
+
+        if (name) {
+            document.getElementById('home-name').innerText = name; // Update the name
+        }
+
         // Other portfolio customizations...
+
         alert('Portfolio Customization Saved!');
         closeModal('customize-portfolio');
     }
@@ -246,5 +252,6 @@
     // Initialize page
     showPage('home');
 </script>
+
 </body>
 </html>
