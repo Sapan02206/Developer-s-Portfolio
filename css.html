@@ -54,6 +54,55 @@
         }
         nav a:hover { color: var(--accent-color); }
 
+        /* Projects Section */
+        #projects {
+            padding: 50px 20px;
+        }
+
+        .projects-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .project {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px;
+            width: 300px; /* Medium size container */
+            text-align: center;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project img {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .project h3 {
+            margin: 10px 0;
+            font-size: 1.5rem;
+        }
+
+        .project:hover {
+            transform: scale(1.05);
+        }
+
+        .project a {
+            text-decoration: none;
+            color: #3498db;
+            font-size: 1.2rem;
+        }
+
+        .project a:hover {
+            color: #e67e22;
+        }
+
         /* Customization Section */
         #customization { 
             background-color: #f1f1f1; 
@@ -100,6 +149,7 @@
             z-index: 1000;
         }
 
+        /* Modal content */
         .modal-content {
             background: white;
             padding: 20px;
@@ -107,10 +157,11 @@
             width: 90%;
             max-width: 600px;
             text-align: center;
-            max-height: 80vh;
-            overflow-y: auto;
+            max-height: 80vh; /* Limit height of the modal */
+            overflow-y: auto; /* Enable vertical scrolling */
         }
 
+        /* Close Button */
         .close-btn {
             position: absolute;
             top: 10px;
@@ -120,6 +171,7 @@
             cursor: pointer;
         }
 
+        /* Inside modal content */
         .modal-content input,
         .modal-content select,
         .modal-content textarea,
@@ -131,6 +183,7 @@
             border: 1px solid #ddd;
         }
 
+        /* Button styles */
         .modal-content button {
             background-color: var(--main-color);
             color: white;
@@ -140,6 +193,11 @@
 
         .modal-content button:hover {
             background-color: #2980b9;
+        }
+
+        /* Prevent body scrolling when modal is open */
+        body.modal-open {
+            overflow: hidden;
         }
     </style>
 </head>
@@ -156,10 +214,18 @@
 <!-- Home Page - Hero Section -->
 <section id="home">
     <div>
-        <h1 id="home-title">Web Developer Portfolio</h1> <!-- This title will be dynamically updated -->
-        <h2 id="home-name">Your Name</h2> <!-- This will be updated based on user input -->
+        <h1><span id="home-title">Web Developer Portfolio</span></h1>
+        <h2 id="home-name">Your Name</h2>
         <p>I’m a Web Developer specializing in front-end and back-end technologies</p>
         <a href="#projects" class="cta-btn" onclick="showPage('projects')">Check out my work</a>
+    </div>
+</section>
+
+<!-- Projects Section -->
+<section id="projects" style="display: none;">
+    <h2>My Projects</h2>
+    <div class="projects-container" id="project-list">
+        <!-- Projects will be dynamically added here -->
     </div>
 </section>
 
@@ -169,7 +235,7 @@
     <div class="customization-options">
         <div class="customization-option" onclick="openModal('customize-portfolio')">
             <h3>Option 1: Customize Portfolio</h3>
-            <p>Change layout, font, background, and more.</p>
+            <p>Change layout, font, background, etc.</p>
         </div>
         <div class="customization-option" onclick="openModal('choose-color-scheme')">
             <h3>Option 2: Choose Color Scheme</h3>
@@ -187,8 +253,7 @@
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal('customize-portfolio')">&times;</span>
         <h3>Customize Your Portfolio</h3>
-        <input type="text" id="portfolio-title" placeholder="Portfolio Title" value="Web Developer Portfolio">
-<!-- New Feature: Customize Name -->
+        <input type="text" id="portfolio-title" placeholder="Portfolio Title">
         <input type="text" id="custom-name" placeholder="Enter Your Name" />
         <input type="text" id="portfolio-description" placeholder="Portfolio Description">
         <input type="file" id="background-image" accept="image/*" onchange="previewBackgroundImage(event)">
@@ -210,7 +275,41 @@
     </div>
 </div>
 
+<div id="choose-color-scheme" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal('choose-color-scheme')">&times;</span>
+        <h3>Choose a Color Scheme</h3>
+        <input type="color" id="main-background-color" value="#f1f1f1">
+        <input type="color" id="primary-button-color" value="#3498db">
+        <input type="color" id="secondary-button-color" value="#e67e22">
+        <input type="color" id="text-hover-color" value="#2c3e50">
+        <input type="color" id="heading-color" value="#2c3e50">
+        <button onclick="saveColorScheme()">Save Scheme</button>
+    </div>
+</div>
+
+<div id="upload-project" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal('upload-project')">&times;</span>
+        <h3>Upload a Project</h3>
+        <input type="text" id="project-title" placeholder="Project Title">
+        <input type="file" id="project-image" accept="image/*">
+        <textarea id="project-description" placeholder="Project Description"></textarea>
+        <input type="url" id="project-link" placeholder="Project Link">
+        <select id="project-category">
+            <option value="web">Web Development</option>
+            <option value="mobile">Mobile App</option>
+            <option value="design">UI/UX Design</option>
+        </select>
+        <input type="text" id="project-tags" placeholder="Tags (comma separated)">
+        <button onclick="saveProject()">Upload Project</button>
+    </div>
+</div>
+
 <script>
+    // Array to store project data
+    let projects = [];
+
     // Modal Functions
     function openModal(modalId) {
         document.body.classList.add('modal-open');
@@ -230,27 +329,95 @@
         document.getElementById(pageId).style.display = 'block';
     }
 
-    // Save Portfolio Customization and update the name
+    // Save Project (Example)
+    function saveProject() {
+        let title = document.getElementById('project-title').value;
+        let image = document.getElementById('project-image').files[0];
+        let description = document.getElementById('project-description').value;
+        let link = document.getElementById('project-link').value;
+        let category = document.getElementById('project-category').value;
+        let tags = document.getElementById('project-tags').value.split(',');
+
+        // Create project object
+        let project = {
+            title: title,
+            image: URL.createObjectURL(image),
+            description: description,
+            link: link,
+            category: category,
+            tags: tags
+        };
+
+        // Save to array
+        projects.push(project);
+
+        // Update projects section
+        let projectList = document.getElementById('project-list');
+        let projectDiv = document.createElement('div');
+        projectDiv.classList.add('project');
+        projectDiv.innerHTML = `
+            <img src="${project.image}" alt="${project.title}">
+            <h3>${project.title}</h3>
+            <p>${project.description}</p>
+            <a href="${project.link}" target="_blank">View Project</a>
+        `;
+        projectList.appendChild(projectDiv);
+
+        // Close modal
+        closeModal('upload-project');
+    }
+
+    // Save Portfolio Customization
     function savePortfolioCustomization() {
-        var title = document.getElementById('portfolio-title').value;
-        var name = document.getElementById('custom-name').value;
+        let title = document.getElementById('portfolio-title').value;
+        let name = document.getElementById('custom-name').value;
+        let description = document.getElementById('portfolio-description').value;
+        let socialLinks = document.getElementById('social-links').value;
+        let textColor = document.getElementById('text-color').value;
+        let backgroundColor = document.getElementById('background-color').value;
+        let bio = document.getElementById('personal-bio').value;
+        let customLogo = document.getElementById('custom-logo').value;
+        let layout = document.getElementById('portfolio-layout').value;
 
+        // Apply customizations
+        document.documentElement.style.setProperty('--main-color', backgroundColor);
+        document.documentElement.style.setProperty('--accent-color', textColor);
+
+        // Update home title and name
         if (title) {
-            document.getElementById('home-title').innerText = title; // Update the title
+            document.getElementById('home-title').innerText = title;
         }
-
         if (name) {
-            document.getElementById('home-name').innerText = name; // Update the name
+            document.getElementById('home-name').innerText = name;
         }
-
-        // Other portfolio customizations...
 
         alert('Portfolio Customization Saved!');
         closeModal('customize-portfolio');
     }
 
-    // Initialize page
-    showPage('home');
+    // Example: change font
+    function changeFont() {
+        let font = document.getElementById('font-select').value;
+        document.documentElement.style.setProperty('font-family', font);
+    }
+
+    // Save Color Scheme
+    function saveColorScheme() {
+        let mainBackgroundColor = document.getElementById('main-background-color').value;
+        let primaryButtonColor = document.getElementById('primary-button-color').value;
+        let secondaryButtonColor = document.getElementById('secondary-button-color').value;
+        let textHoverColor = document.getElementById('text-hover-color').value;
+        let headingColor = document.getElementById('heading-color').value;
+
+        document.documentElement.style.setProperty('--main-color', mainBackgroundColor);
+        document.documentElement.style.setProperty('--primary-button-color', primaryButtonColor);
+        document.documentElement.style.setProperty('--secondary-button-color', secondaryButtonColor);
+        document.documentElement.style.setProperty('--text-hover-color', textHoverColor);
+        document.documentElement.style.setProperty('--heading-color', headingColor);
+
+        alert('Color Scheme Saved!');
+        closeModal('choose-color-scheme');
+    }
 </script>
 
 </body>
