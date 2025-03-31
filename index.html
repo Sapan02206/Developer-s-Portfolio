@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web Developer Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        :root {
+            --main-color: #3498db;
+            --accent-color: #e67e22;
+            --font-family: 'Poppins', sans-serif;
+            --background-image: url(''); /* Default background */
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-family); background-color: #f8f9fa; color: #333; }
+
+        /* Home Page - Hero Section */
+        #home {
+            background: var(--main-color) url('') no-repeat center center;
+            background-size: cover;
+            color: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            flex-direction: column;
+            padding: 100px 20px 0 20px;
+            position: relative;
+        }
+        #home h1 { font-size: 4rem; margin-bottom: 10px; }
+        #home h2 { font-size: 2rem; margin-bottom: 10px; }
+        #home p { font-size: 1rem; margin-bottom: 30px; }
+        #home .cta-btn { padding: 15px 30px; font-size: 1.2rem; background-color: var(--accent-color); color: white; text-decoration: none; border-radius: 5px; transition: background-color 0.3s ease; }
+        #home .cta-btn:hover { background-color: #d35400; }
+
+        /* Navigation Bar */
+        nav {
+            position: sticky;
+            top: 0;
+            background-color: #34495e;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            margin: 0 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+        nav a:hover { color: var(--accent-color); }
+
+        /* Customization Section */
+        #customization { 
+            background-color: #f1f1f1; 
+            padding: 50px 20px; 
+        }
+        #customization h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+        .customization-options {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .customization-option {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px;
+            width: 250px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        .customization-option h3 {
+            margin-bottom: 10px;
+        }
+        .customization-option:hover {
+            transform: scale(1.05);
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            color: #e67e22;
+            cursor: pointer;
+        }
+
+        .modal-content input,
+        .modal-content select,
+        .modal-content textarea,
+        .modal-content button {
+            margin-top: 10px;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .modal-content button {
+            background-color: var(--main-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .modal-content button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<nav>
+    <a href="#" onclick="showPage('home')">Home</a>
+    <a href="#" onclick="showPage('projects')">Projects</a>
+    <a href="#" onclick="showPage('contact')">Contact Me</a>
+    <a href="#" onclick="showPage('customization')">Customization</a>
+</nav>
+
+<!-- Home Page - Hero Section -->
+<section id="home">
+    <div>
+        <h1>Web Developer Portfolio</h1>
+        <h2>Your Name</h2> <!-- This will be dynamically updated -->
+        <p>I’m a Web Developer specializing in front-end and back-end technologies</p>
+        <a href="#projects" class="cta-btn" onclick="showPage('projects')">Check out my work</a>
+    </div>
+</section>
+
+<!-- Customization Section -->
+<section id="customization" style="display: none;">
+    <h2>Customization Options</h2>
+    <div class="customization-options">
+        <div class="customization-option" onclick="openModal('customize-portfolio')">
+            <h3>Option 1: Customize Portfolio</h3>
+            <p>Change layout, font, background, and more.</p>
+        </div>
+        <div class="customization-option" onclick="openModal('choose-color-scheme')">
+            <h3>Option 2: Choose Color Scheme</h3>
+            <p>Adjust colors, gradients, and more.</p>
+        </div>
+        <div class="customization-option" onclick="openModal('upload-project')">
+            <h3>Option 3: Upload Your Project</h3>
+            <p>Add projects, categories, and more.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Modals for Customization Options -->
+<div id="customize-portfolio" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal('customize-portfolio')">&times;</span>
+        <h3>Customize Your Portfolio</h3>
+        <input type="text" id="portfolio-title" placeholder="Portfolio Title">
+         <!-- New Feature: Customize Name -->
+        <input type="text" id="custom-name" placeholder="Enter Your Name" />
+        <input type="text" id="portfolio-description" placeholder="Portfolio Description">
+        <input type="file" id="background-image" accept="image/*" onchange="previewBackgroundImage(event)">
+        <select id="font-select" onchange="changeFont()">
+            <option value="Poppins">Poppins</option>
+            <option value="Arial">Arial</option>
+            <option value="Georgia">Georgia</option>
+        </select>
+        <input type="text" id="social-links" placeholder="Social Media Links (comma separated)">
+        <input type="color" id="text-color" placeholder="Change Text Color">
+        <input type="color" id="background-color" placeholder="Change Background Color">
+        <textarea id="personal-bio" placeholder="Add Personal Bio"></textarea>
+        <input type="url" id="custom-logo" placeholder="Upload Custom Logo (URL)">
+        <select id="portfolio-layout">
+            <option value="grid">Grid Layout</option>
+            <option value="carousel">Carousel Layout</option>
+        </select>
+        <button onclick="savePortfolioCustomization()">Save Changes</button>
+    </div>
+</div>
+
+<!-- Other modals remain the same -->
+
+<script>
+    // Modal Functions
+    function openModal(modalId) {
+        document.body.classList.add('modal-open');
+        document.getElementById(modalId).style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+        document.body.classList.remove('modal-open');
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    // Page Navigation
+    function showPage(pageId) {
+        document.querySelectorAll('section').forEach(function(section) {
+            section.style.display = 'none';
+        });
+        document.getElementById(pageId).style.display = 'block';
+    }
+
+    // Save Portfolio Customization and update the name
+    function savePortfolioCustomization() {
+        var name = document.getElementById('custom-name').value; // Get the custom name
+        if (name) {
+            document.querySelector('#home h2').innerText = name; // Update the name in the home section
+        }
+        // Other portfolio customizations...
+        alert('Portfolio Customization Saved!');
+        closeModal('customize-portfolio');
+    }
+
+    // Initialize page
+    showPage('home');
+</script>
+</body>
+</html>
